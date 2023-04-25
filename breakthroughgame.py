@@ -59,6 +59,8 @@ class BreakthroughGame:
     def run(self):
         self.clock.tick(60)
 
+        # Track the total game tree nodes for each player
+
         # Clear the screen
         self.screen.fill([255, 255, 255])
 
@@ -72,19 +74,19 @@ class BreakthroughGame:
                 self.total_time_black += (time.process_time() - start)
                 self.total_steps_black += 1
                 print('total_steps_black = ', self.total_steps_black,
-                      'total_nodes_black = ', self.total_nodes_black,
+                      'total_gametree_nodes_black = ', self.total_nodes_black,
                       'nodes_per_move_black = ', self.total_nodes_black/self.total_steps_black,
                       'time_per_move_black = ', self.total_time_black/self.total_steps_black,
                       'have_eaten = ', self.eat_piece)
             # White's turn
             elif self.turn == 2:
                 start = time.process_time()
-                # 1 - minimax, 2 - alpha-beta
-                self.ai_move(1,1)
+                # (1 - minimax, 2 - alpha-beta), (1 - offHeuristic1, 2 - defHeuristic1, 3 - offHeuristic2, 4 - defHeuristic2)
+                self.ai_move(2,1)
                 self.total_time_white += (time.process_time() - start)
                 self.total_steps_white += 1
                 print('total_steps_white = ', self.total_steps_white,
-                      'total_nodes_white = ', self.total_nodes_white,
+                      'total_gametree_nodes_white = ', self.total_nodes_white,
                       'nodes_per_move_white = ', self.total_nodes_white/self.total_steps_white,
                       'time_per_move_white = ', self.total_time_white/self.total_steps_white,
                       'have_eaten = ', self.eat_piece)
@@ -282,7 +284,7 @@ class BreakthroughGame:
             self.total_nodes_white += nodes
             self.turn = 1
         self.eat_piece = 16 - piece
-        if self.isGoalState():
+        if self.is_goal_state():
             self.status = 3
 
     # Function to move the piece using alpha-beta
@@ -296,12 +298,12 @@ class BreakthroughGame:
             self.total_nodes_white += nodes
             self.turn = 1
         self.eat_piece = 16 - piece
-        if self.isGoalState():
+        if self.is_goal_state():
             self.status = 3
 
     # Function to check if the game is over
     # If the game is over, return True, else return False
-    def isGoalState(self, base=0):
+    def is_goal_state(self, base=0):
         if base == 0:
             if 2 in self.board_matrix[0] or 1 in self.board_matrix[7]:
                 return True
