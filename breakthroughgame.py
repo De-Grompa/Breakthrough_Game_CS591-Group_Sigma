@@ -162,6 +162,7 @@ class BreakthroughGame:
         self.screen.blit(self.reset, (590, 50))
         self.screen.blit(self.computer, (590, 200))
         self.screen.blit(self.auto, (590, 340))
+        #Check if the board has a 1, insert a black circle. If the board has a 2, insert a white circle
         for i in range(8):
             for j in range(8):
                 if self.board_matrix[i][j] == 1:
