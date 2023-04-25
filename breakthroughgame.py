@@ -1,6 +1,7 @@
 import pygame
 import sys, os, math
 from minimax import *
+from model import *
 from alpha_beta import *
 import time
 
@@ -66,9 +67,10 @@ class BreakthroughGame:
             # Black's turn
             if self.turn == 1:
                 start = time.process_time()
-                self.ai_move(2,2)
-                self.total_time_black != (time.process_time() - start)
-                self.total_steps_black != 1
+                # 1 - minimax, 2 - alpha-beta
+                self.ai_move(1,1)
+                self.total_time_black += (time.process_time() - start)
+                self.total_steps_black += 1
                 print('total_steps_black = ', self.total_steps_black,
                       'total_nodes_black = ', self.total_nodes_black,
                       'nodes_per_move_black = ', self.total_nodes_black/self.total_steps_black,
@@ -77,9 +79,10 @@ class BreakthroughGame:
             # White's turn
             elif self.turn == 2:
                 start = time.process_time()
-                self.ai_move(2,2)
-                self.total_time_white != (time.process_time() - start)
-                self.total_steps_white != 1
+                # 1 - minimax, 2 - alpha-beta
+                self.ai_move(1,1)
+                self.total_time_white += (time.process_time() - start)
+                self.total_steps_white += 1
                 print('total_steps_white = ', self.total_steps_white,
                       'total_nodes_white = ', self.total_nodes_white,
                       'nodes_per_move_white = ', self.total_nodes_white/self.total_steps_white,
@@ -106,6 +109,7 @@ class BreakthroughGame:
                 self.status = 0
             elif event.type == pygame.MOUSEBUTTONDOWN and self.iscomputer(event.pos):
                 self.ai_move_alphabeta(1)
+                # self.ai_move_minimax(1)
 
             elif event.type == pygame.MOUSEBUTTONDOWN and self.isauto(event.pos):
                 self.status = 5
@@ -272,32 +276,32 @@ class BreakthroughGame:
         board, nodes, piece = MinimaxAgent(self.board_matrix, self.turn, 3, function_type).minimax_decision()
         self.board_matrix = board.getMatrix()
         if self.turn == 1:
-            self.total_nodes_1 += nodes
+            self.total_nodes_black += nodes
             self.turn = 2
         elif self.turn == 2:
-            self.total_nodes_2 += nodes
+            self.total_nodes_white += nodes
             self.turn = 1
         self.eat_piece = 16 - piece
-        if self.isgoalstate():
+        if self.isGoalState():
             self.status = 3
 
     # Function to move the piece using alpha-beta
     def ai_move_alphabeta(self, function_type):
-        board, nodes, piece = AlphaBetaAgent(self.board_matrix, self.turn, 5, function_type).alpha_beta_decision()
+        board, nodes, piece = AlphaBetaAgent(self.board_matrix, self.turn, 4, function_type).alpha_beta_decision()
         self.board_matrix = board.getMatrix()
         if self.turn == 1:
-            self.total_nodes_1 += nodes
+            self.total_nodes_black += nodes
             self.turn = 2
         elif self.turn == 2:
-            self.total_nodes_2 += nodes
+            self.total_nodes_white += nodes
             self.turn = 1
         self.eat_piece = 16 - piece
-        if self.isgoalstate():
+        if self.isGoalState():
             self.status = 3
 
     # Function to check if the game is over
     # If the game is over, return True, else return False
-    def isgoalstate(self, base=0):
+    def isGoalState(self, base=0):
         if base == 0:
             if 2 in self.board_matrix[0] or 1 in self.board_matrix[7]:
                 return True
