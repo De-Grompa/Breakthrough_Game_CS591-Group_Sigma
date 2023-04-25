@@ -9,7 +9,7 @@ class BreakthroughGame:
     def __init__(self):
         pygame.init()
         self.width, self.height = 700, 560
-        self.sizeofcell = int(560/8)
+        self.cellSize = int(560/8)
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.screen.fill([255, 255, 255])
         # Create board and pieces
@@ -111,7 +111,6 @@ class BreakthroughGame:
                 self.status = 0
             elif event.type == pygame.MOUSEBUTTONDOWN and self.iscomputer(event.pos):
                 self.ai_move_alphabeta(1)
-                # self.ai_move_minimax(1)
 
             elif event.type == pygame.MOUSEBUTTONDOWN and self.isauto(event.pos):
                 self.status = 5
@@ -120,17 +119,17 @@ class BreakthroughGame:
             # If the user clicks on the board
             elif event.type == pygame.MOUSEBUTTONDOWN and self.status == 0:
                 x, y = event.pos
-                coor_x = math.floor(y/self.sizeofcell)
-                coor_y = math.floor(x/self.sizeofcell)
+                coor_x = math.floor(y/self.cellSize)
+                coor_y = math.floor(x/self.cellSize)
                 if self.board_matrix[coor_x][coor_y] == self.turn:
                     self.status = 1
-                    self.origin_x = math.floor(y / self.sizeofcell)
-                    self.origin_y = math.floor(x / self.sizeofcell)
+                    self.origin_x = math.floor(y / self.cellSize)
+                    self.origin_y = math.floor(x / self.cellSize)
             # Check whether the piece can move, otherwise select another piece
             elif event.type == pygame.MOUSEBUTTONDOWN and self.status == 1:
                 x, y = event.pos
-                self.dest_x = math.floor(y / self.sizeofcell)
-                self.dest_y = math.floor(x / self.sizeofcell)
+                self.dest_x = math.floor(y / self.cellSize)
+                self.dest_y = math.floor(x / self.cellSize)
                 if self.isabletomove():
                     self.movepiece()
                     if (self.dest_x == 7 and self.board_matrix[self.dest_x][self.dest_y] == 1) \
@@ -148,11 +147,11 @@ class BreakthroughGame:
         self.board = pygame.image.load_extended(os.path.join('src', 'chessboard.jpg'))
         self.board = pygame.transform.scale(self.board, (560, 560))
         self.blackcircle = pygame.image.load_extended(os.path.join('src', 'blackcircle.png'))
-        self.blackcircle = pygame.transform.scale(self.blackcircle, (self.sizeofcell- 20, self.sizeofcell - 20))
+        self.blackcircle = pygame.transform.scale(self.blackcircle, (self.cellSize- 20, self.cellSize - 20))
         self.whitecircle = pygame.image.load_extended(os.path.join('src', 'whitecircle.png'))
-        self.whitecircle = pygame.transform.scale(self.whitecircle, (self.sizeofcell - 20, self.sizeofcell - 20))
+        self.whitecircle = pygame.transform.scale(self.whitecircle, (self.cellSize - 20, self.cellSize - 20))
         self.outline = pygame.image.load_extended(os.path.join('src', 'square-outline.png'))
-        self.outline = pygame.transform.scale(self.outline, (self.sizeofcell, self.sizeofcell))
+        self.outline = pygame.transform.scale(self.outline, (self.cellSize, self.cellSize))
         self.reset = pygame.image.load_extended(os.path.join('src', 'reset.jpg'))
         self.reset = pygame.transform.scale(self.reset, (80, 80))
         self.winner = pygame.image.load_extended(os.path.join('src', 'winner.png'))
@@ -172,9 +171,9 @@ class BreakthroughGame:
         for i in range(8):
             for j in range(8):
                 if self.board_matrix[i][j] == 1:
-                    self.screen.blit(self.blackcircle, (self.sizeofcell * j + 10, self.sizeofcell * i + 10))
+                    self.screen.blit(self.blackcircle, (self.cellSize * j + 10, self.cellSize * i + 10))
                 elif self.board_matrix[i][j] == 2:
-                    self.screen.blit(self.whitecircle, (self.sizeofcell * j + 10, self.sizeofcell * i + 10))
+                    self.screen.blit(self.whitecircle, (self.cellSize * j + 10, self.cellSize * i + 10))
         if self.status == 1:
             # Character can only move downward
             if self.board_matrix[self.origin_x][self.origin_y] == 1:
@@ -187,15 +186,15 @@ class BreakthroughGame:
                 # Down-left
                 if y1 >= 0 and self.board_matrix[x1][y1] != 1:
                     self.screen.blit(self.outline,
-                                     (self.sizeofcell * y1, self.sizeofcell * x1))
+                                     (self.cellSize * y1, self.cellSize * x1))
                 # Down-right
                 if y2 <= 7 and self.board_matrix[x2][y2] != 1:
                     self.screen.blit(self.outline,
-                                     (self.sizeofcell * y2, self.sizeofcell * x2))
+                                     (self.cellSize * y2, self.cellSize * x2))
                 # Down
                 if x3 <= 7 and self.board_matrix[x3][y3] == 0:
                     self.screen.blit(self.outline,
-                                     (self.sizeofcell * y3, self.sizeofcell * x3))
+                                     (self.cellSize * y3, self.cellSize * x3))
 
             # Character can only move upward
             if self.board_matrix[self.origin_x][self.origin_y] == 2:
@@ -208,15 +207,15 @@ class BreakthroughGame:
                 # Up-left
                 if y1 >= 0 and self.board_matrix[x1][y1] != 2:
                     self.screen.blit(self.outline,
-                                     (self.sizeofcell * y1, self.sizeofcell * x1))
+                                     (self.cellSize * y1, self.cellSize * x1))
                 # Up-right
                 if y2 <= 7 and self.board_matrix[x2][y2] != 2:
                     self.screen.blit(self.outline,
-                                     (self.sizeofcell * y2, self.sizeofcell * x2))
+                                     (self.cellSize * y2, self.cellSize * x2))
                 # Up
                 if x3 >= 0 and self.board_matrix[x3][y3] == 0:
                     self.screen.blit(self.outline,
-                                     (self.sizeofcell * y3, self.sizeofcell * x3))
+                                     (self.cellSize * y3, self.cellSize * x3))
         if self.status == 3:
             self.screen.blit(self.winner, (100, 100))
 

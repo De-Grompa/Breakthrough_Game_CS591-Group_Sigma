@@ -95,7 +95,7 @@ class AlphaBetaAgent:
             if action.direction == 2:
                 if (y - 1, x + 1) in state.white_positions:
                     return 2
-        ##pruning for black
+        #pruning for black
         elif action.turn == 2:
             if action.direction == 1:
                 if (y + 1, x - 1) in state.black_positions:
