@@ -69,8 +69,8 @@ class BreakthroughGame:
             # Black's turn
             if self.turn == 1:
                 start = time.process_time()
-                # 1 - minimax, 2 - alpha-beta
-                self.ai_move(1,1)
+                # 1 - minimax, 2 - alpha-beta, (1 - offHeuristic1, 2 - defHeuristic1, 3 - offHeuristic2, 4 - defHeuristic2)
+                self.ai_move(2,3)
                 self.total_time_black += (time.process_time() - start)
                 self.total_steps_black += 1
                 print('total_steps_black = ', self.total_steps_black,
@@ -82,7 +82,7 @@ class BreakthroughGame:
             elif self.turn == 2:
                 start = time.process_time()
                 # (1 - minimax, 2 - alpha-beta), (1 - offHeuristic1, 2 - defHeuristic1, 3 - offHeuristic2, 4 - defHeuristic2)
-                self.ai_move(2,1)
+                self.ai_move(2,2)
                 self.total_time_white += (time.process_time() - start)
                 self.total_steps_white += 1
                 print('total_steps_white = ', self.total_steps_white,

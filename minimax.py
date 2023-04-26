@@ -2,6 +2,8 @@ import numpy as np
 from model import *
 
 #Create MiniMaxAgent class
+# 
+# Decides the next move for the AI
 class MinimaxAgent:
     def __init__(self, boardmatrix, turn, depth, function, type=0):
         self.boardmatrix = boardmatrix
@@ -28,7 +30,6 @@ class MinimaxAgent:
         for action in state.available_actions():
             v = min(v, self.maximum_value(state.transfer(action), depth + 1))
             self.nodes += 1
-
         return v
     #Minimax decision function
     def minimax_decision(self):
